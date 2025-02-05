@@ -19,5 +19,5 @@ pip install -r requirements.txt
 # --application-host  - адрес хоста приложения, данные которого бэкапим
 # --alluredir         - директория для формирования allure отчета
 # например:
-pytest --backup-agent-host=http://localhost:8000 --application-host=http://localhost:8000 tests/test_plan/test_create_plan.py
+pytest --backup-agent-host=http://localhost:8000 --application-host=http://localhost:8000 --alluredir=allure tests
 ```
