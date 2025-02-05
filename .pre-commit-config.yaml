@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: no-commit-to-branch
+        args: [--branch, main]
