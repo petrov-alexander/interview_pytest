@@ -3,8 +3,12 @@ import uuid
 import allure
 
 from lib.backup_agent.errors import Errors
-from lib.backup_agent.states import States
+from lib.backup_agent.task_states import TaskStates
 from waiting import wait
+
+from lib.backup_agent.task_types import TaskTypes
+
+import pendulum
 
 
 @allure.feature("Run backup")
@@ -24,27 +28,37 @@ class TestRunBackup:
             res = ba_api.run_backup(plan_id=plan_id)
         with allure.step("Check backup in progress"):
             assert res.status_code == 200
-            backup = res.json()
-            assert backup["id"] is not None
-            assert backup["plan_id"] == plan_id
-            assert backup["state"] == States.IN_PROGRESS
-            assert backup["error"] is None
-            backup_id = backup["id"]
-        with allure.step("Wait backup completed"):
+            task = res.json()
+            assert task["id"] is not None
+            assert task["plan_id"] == plan_id
+            assert task["state"] == TaskStates.IN_PROGRESS
+            assert task["error"] is None
+            assert task["type"] == TaskTypes.BACKUP
+            assert task["paths"] == request_data["paths"]
+            assert task["restore_point"] is None
+            assert pendulum.parse(task["start_time"]).diff(pendulum.now()).in_seconds() < 5
+            assert task["finish_time"] is None
+            task_id = task["id"]
+        with allure.step("Wait backup task completed"):
             wait(
-                lambda: ba_api.get_backup(backup_id=backup["id"]).json()["state"]
-                != States.IN_PROGRESS,
+                lambda: ba_api.get_task(task_id=task["id"]).json()["state"]
+                        != TaskStates.IN_PROGRESS,
                 timeout_seconds=10,
-                waiting_for=f"backup {backup_id} completed",
+                waiting_for=f"backup task {task_id} completed",
             )
         with allure.step("Backup completed successfully"):
-            res = ba_api.get_backup(backup_id=backup_id)
+            res = ba_api.get_task(task_id=task_id)
             assert res.status_code == 200
-            backup = res.json()
-            assert backup["id"] is not None
-            assert backup["plan_id"] == plan_id
-            assert backup["state"] == States.COMPLETED
-            assert backup["error"] is None
+            task = res.json()
+            assert task["id"] is not None
+            assert task["plan_id"] == plan_id
+            assert task["state"] == TaskStates.COMPLETED
+            assert task["error"] is None
+            assert task["type"] == TaskTypes.BACKUP
+            assert task["paths"] == request_data["paths"]
+            assert task["restore_point"] == 1
+            assert pendulum.parse(task["start_time"]) < pendulum.parse(task["finish_time"])
+            assert pendulum.parse(task["finish_time"]).diff(pendulum.now()).in_seconds() < 5
         with allure.step("Restore point created correctly"):
             res = ba_api.get_restore_points(plan_id=plan_id)
             assert res.status_code == 200

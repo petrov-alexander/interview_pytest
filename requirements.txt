@@ -1,4 +1,5 @@
 allure-pytest
+pendulum
 pre-commit
 pytest
 requests
