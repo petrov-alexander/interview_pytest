@@ -6,6 +6,7 @@ from waiting import wait
 
 
 PLAN_NAME = f"test_{str(uuid.uuid4())[:4]}"
+PLAN_RUN_COUNT = 10
 
 
 @allure.feature("Check duration")
@@ -22,7 +23,7 @@ class TestCheckDuration:
             res = app_api.update_data(data=app_data)
             res.raise_for_status()
         with allure.step("Run backups"):
-            for _ in range(10):
+            for _ in range(PLAN_RUN_COUNT):
                 res = ba_api.run_backup(plan_id=plan_id)
                 res.raise_for_status()
                 task = res.json()
