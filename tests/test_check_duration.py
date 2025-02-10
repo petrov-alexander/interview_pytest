@@ -38,4 +38,31 @@ class TestCheckDuration:
 
     @allure.title("Count performance statistic")
     def test_count_statistic(self, ba_api, app_api):
+        """
+        Prepare results.json:
+            {
+                "0": [
+                    "08744a45-573a-4a88-b90f-5e1a689dcf3c"
+                ],
+                "1": [
+                    "3db8ec2f-9d68-45eb-860f-ef5fe1c7d22f"
+                ],
+                "tasks": [
+                    {
+                        "id": "3db8ec2f-9d68-45eb-860f-ef5fe1c7d22f",
+                        "plan_id": "b155b3fb-98eb-423a-b018-c9bdc6675a62",
+                        ...
+                        "start_time": "2025-02-07T15:31:04.318968+03:00",
+                        "finish_time": "2025-02-07T15:31:05.636152+03:00",
+                    },
+                    {
+                        "id": "08744a45-573a-4a88-b90f-5e1a689dcf3c",
+                        "plan_id": "b155b3fb-98eb-423a-b018-c9bdc6675a62",
+                        ...
+                        "start_time": "2025-02-07T15:31:12.926239+03:00",
+                        "finish_time": "2025-02-07T15:31:13.834826+03:00",
+                    },
+                ]
+            }
+        """
         pass
