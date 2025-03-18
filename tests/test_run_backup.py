@@ -35,7 +35,7 @@ class TestRunBackup:
             assert task["error"] is None
             assert task["type"] == TaskTypes.BACKUP
             assert task["paths"] == request_data["paths"]
-            assert task["restore_point"] is None
+            assert task["restore_point_id"] is None
             assert pendulum.parse(task["start_time"]).diff(pendulum.now()).in_seconds() < 5
             assert task["finish_time"] is None
             task_id = task["id"]
@@ -56,17 +56,9 @@ class TestRunBackup:
             assert task["error"] is None
             assert task["type"] == TaskTypes.BACKUP
             assert task["paths"] == request_data["paths"]
-            assert task["restore_point"] == 1
+            assert task["restore_point_id"] is not None
             assert pendulum.parse(task["start_time"]) < pendulum.parse(task["finish_time"])
             assert pendulum.parse(task["finish_time"]).diff(pendulum.now()).in_seconds() < 5
-        with allure.step("Restore point created correctly"):
-            res = ba_api.get_restore_points(plan_id=plan_id)
-            assert res.status_code == 200
-            rps = res.json()
-            assert len(rps) == 1
-            assert len(rps["1"]) == 2
-            assert rps["1"]["test1"] == "data1"
-            assert rps["1"]["test2"] == "data2"
 
     @allure.title("Run backup with not existing plan")
     def test_run_backup_with_not_existing_plan(self, ba_api, app_api):

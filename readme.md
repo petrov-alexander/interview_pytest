@@ -1,5 +1,4 @@
 # Тесты на Pytest
-В репозитории реализованы некоторые API тесты на Pytest для сервиса https://hub.docker.com/r/alexpas13/test-service
 
 ## Подготовка
 ```bash

@@ -8,7 +8,6 @@ from lib.abstract_api import AbstractApi
 class BackupAgentApi(AbstractApi):
     PLANS = "/plans/"
     DELETE_PLAN = "/plans/{}"
-    GET_RESTORE_POINTS = "/plans/{}/restore_points"
     RUN_BACKUP = "/plans/{}/backup"
 
     GET_TASK = "/tasks/{}"
@@ -24,9 +23,6 @@ class BackupAgentApi(AbstractApi):
 
     def get_plans(self) -> Response:
         return self._session.get(self._host + self.PLANS)
-
-    def get_restore_points(self, plan_id: str) -> Response:
-        return self._session.get(self._host + self.GET_RESTORE_POINTS.format(plan_id))
 
     def get_task(self, task_id: str) -> Response:
         return self._session.get(self._host + self.GET_TASK.format(task_id))
