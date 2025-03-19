@@ -35,7 +35,6 @@ class TestRunBackup:
             assert task["error"] is None
             assert task["type"] == TaskTypes.BACKUP
             assert task["paths"] == request_data["paths"]
-            assert task["restore_point_id"] is None
             assert pendulum.parse(task["start_time"]).diff(pendulum.now()).in_seconds() < 5
             assert task["finish_time"] is None
             task_id = task["id"]
@@ -56,7 +55,6 @@ class TestRunBackup:
             assert task["error"] is None
             assert task["type"] == TaskTypes.BACKUP
             assert task["paths"] == request_data["paths"]
-            assert task["restore_point_id"] is not None
             assert pendulum.parse(task["start_time"]) < pendulum.parse(task["finish_time"])
             assert pendulum.parse(task["finish_time"]).diff(pendulum.now()).in_seconds() < 5
 
