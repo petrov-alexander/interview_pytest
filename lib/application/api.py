@@ -6,7 +6,7 @@ from lib.abstract_api import AbstractApi
 
 
 class ApplicationApi(AbstractApi):
-    DATA = "/data"
+    DATA = "/data/"
 
     def delete_data(self) -> Response:
         return self._session.delete(self._host + self.DATA)
